@@ -287,20 +287,20 @@ class PPO(object):
 
 			for minibatch in minibatches:
 				stack_JtA = self.muscle_buffer['JtA'][minibatch].astype(np.float32)
-				stack_tau_des =  self.muscle_buffer['TauDes'][minibatch].astype(np.float32)
+				stack_tau_des =  self.muscle_buffer['TauDes'][minibatch].astype(np.float32) # desired joint torque
 				stack_L = self.muscle_buffer['L'][minibatch].astype(np.float32)
 				stack_L = stack_L.reshape(self.muscle_batch_size,self.num_action,self.num_muscles)
 				stack_b = self.muscle_buffer['b'][minibatch].astype(np.float32)
 
-				stack_JtA = Tensor(stack_JtA)
-				stack_tau_des = Tensor(stack_tau_des)
-				stack_L = Tensor(stack_L)
-				stack_b = Tensor(stack_b)
+				stack_JtA = Tensor(stack_JtA) # relation between Joint torque and activation?
+				stack_tau_des = Tensor(stack_tau_des) # desired joint torque
+				stack_L = Tensor(stack_L) # length of muscle?
+				stack_b = Tensor(stack_b) # bias
 
 				activation = self.muscle_model(stack_JtA,stack_tau_des)
-				tau = torch.einsum('ijk,ik->ij',(stack_L,activation)) + stack_b
+				tau = torch.einsum('ijk,ik->ij',(stack_L,activation)) + stack_b # calc joint torque tau; einstein summation
 
-				loss_reg = (activation).pow(2).mean()
+				loss_reg = (activation).pow(2).mean() # penalty to activation
 				loss_target = (((tau-stack_tau_des)/100.0).pow(2)).mean()
 
 				loss = 0.01*loss_reg + loss_target

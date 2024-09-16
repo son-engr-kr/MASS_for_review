@@ -238,8 +238,10 @@ Environment::
 GetDesiredTorques()
 {
 	Eigen::VectorXd p_des = mTargetPositions;
+	// .tail(n): select last n elements
+	// n = mTargetPositions.rows() - mRootJointDof: # of joint except root joints
 	p_des.tail(mTargetPositions.rows()-mRootJointDof) += mAction;
-	mDesiredTorque = mCharacter->GetSPDForces(p_des);
+	mDesiredTorque = mCharacter->GetSPDForces(p_des); // Stable Propotional Torque
 	return mDesiredTorque.tail(mDesiredTorque.rows()-mRootJointDof);
 }
 Eigen::VectorXd
@@ -326,7 +328,7 @@ void
 Environment::
 SetAction(const Eigen::VectorXd& a)
 {
-	mAction = a*0.1;
+	mAction = a*0.1;// why?
 
 	double t = mWorld->getTime();
 

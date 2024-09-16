@@ -1,0 +1,29 @@
+{
+	"files": [
+		{
+			"path": "python/main.py",
+			"bookmarks": [
+				{
+					"line": 197,
+					"column": 20,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "core/Environment.cpp",
+			"bookmarks": [
+				{
+					"line": 237,
+					"column": 13,
+					"label": ""
+				},
+				{
+					"line": 330,
+					"column": 13,
+					"label": "mAction setting -> why multiply 0.1?"
+				}
+			]
+		}
+	]
+}
